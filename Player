@@ -1,0 +1,97 @@
+class Player {
+  float x, y;
+  float dx, dy;
+  float speed = 1;
+ 
+  int pWidth, pHeight; //player width and height
+  int health;
+  int score;
+  
+  int playerTimer;
+  
+  boolean up, down, left, right;
+ 
+  PImage image;
+  
+  Player(int x, int y) {
+    this.x = x;
+    this.y = y;
+    pWidth = 100;
+    pHeight = 100;
+    health = 100;
+   
+    up = down = left = right = false;
+    dx = 0;
+    dy = 0;
+   
+    image = loadImage("assets/player.png");
+    image.resize(pWidth, pHeight);
+  }
+  
+  void update() {
+    x += dx;
+    y += dy;
+    
+    if (up) dy -= speed;
+    if (down) dy += speed;
+    if (right) dx += speed;
+    if (left) dx -= speed;
+    
+    dx *= 0.8;
+    dy *= 0.8;
+             
+    //prevents player from moving out the screen (detects collision with screen)
+    if (x < 0) {
+      x = 0; //if x < 0, x is set to 0 to prevent passing through the wall
+    }
+    
+    if (x > width) {
+      x = width;
+    }
+ 
+    if (y < 0) {
+      y = 0;
+    }
+    
+    if (y > height) {
+      y = height;
+    }
+  }
+  
+  void render() {
+    pushMatrix();
+    translate(x, y);
+    
+    //rectMode(CENTER); //shows a rect that outlines the player
+    //fill(0, 0, 255, 100);
+    //rect(0, 0, pWidth, pHeight);
+    
+    imageMode(CENTER); //makes images' center in the middle
+    image(image, 0, 0);
+    popMatrix();
+  }
+  
+  boolean touchingEnemy(Enemy myEnemy) {
+    if (x + pWidth/2 > myEnemy.x - myEnemy.eWidth/2 //detecting the right edge
+     && x - pWidth/2 < myEnemy.x + myEnemy.eWidth/2 //left
+     && y + pHeight/2 > myEnemy.y - myEnemy.eHeight/2 //bottom
+     && y - pHeight/2 < myEnemy.y + myEnemy.eHeight/2) { //top
+       return true;
+     }
+     else {
+       return false; 
+     }
+  }
+  
+  boolean touchingItem(Item myItem) {
+    if (x + pWidth/2 > myItem.x - myItem.iWidth/2 //detecting the right edge
+     && x - pWidth/2 < myItem.x + myItem.iWidth/2 //left
+     && y + pHeight/2 > myItem.y - myItem.iHeight/2 //bottom
+     && y - pHeight/2 < myItem.y + myItem.iHeight/2) { //top
+       return true;
+     }
+     else {
+       return false;
+     }
+  }
+}
