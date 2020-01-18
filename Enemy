@@ -1,0 +1,74 @@
+class Enemy {
+  int x, y; //position
+  int dx, dy; //speed
+  int animTimer;
+  
+  PImage image;
+  int eWidth, eHeight; //enemy width and height
+  
+  Enemy(int x, int y) {
+    this.x = x; //indicate the x in the parameter
+    this.y = y;
+    while (dx == 0) //makes the enemies constantly move
+      dx = (int) random(-2, 2);
+    while (dy == 0)
+      dy = (int) random(-2, 2);
+    animTimer = 0;
+        
+    eWidth = 80;
+    eHeight = 85;
+   
+    image = loadImage("assets/enemy.png");
+    image.resize(eWidth, eHeight);
+  }
+  
+  void update() {
+    x = x + dx;
+    y = y + dy;
+          
+    //prevents enemies from moving out the screen (detects collision with screen)
+    if(x - eWidth/2 < 0 || x + eWidth/2 > width) { 
+      dx *= -1;
+    }
+ 
+    if(y - eHeight/2 < 0 || y + eHeight/2 > height) {
+      dy *= -1;
+    }
+  }
+  
+  void render() {
+   pushMatrix();
+   translate(x, y); //sets the x and y location
+   //scale(1.5);
+   
+   // this was used before the graphics were added
+  /* fill(255, 0, 0);
+   ellipse(0, 0, 50, 50);
+ 
+   fill(255);
+   ellipse(0, -20, 20, 20);
+   
+   fill(150, 250, 0);
+   ellipse(20, 20, 20, 50);
+   ellipse(-20, 20, 20, 50);
+   
+   fill(150);
+   triangle(-20, -25, 1, -30, 20, -25);
+   
+   pushMatrix();
+   fill(0);
+   rotate(2 * radians(animTimer));
+   rect(0, 0, 10, 10);
+   popMatrix();
+   */
+   
+   imageMode(CENTER); //makes images' center in the middle
+   image(image, 0, 0);
+  
+   rectMode(CENTER); //shows a rect that outlines the enemy
+   //fill(0, 0, 255, 100);
+   //rect(0, 0, eWidth, eHeight);
+   
+   popMatrix();
+  }
+}
