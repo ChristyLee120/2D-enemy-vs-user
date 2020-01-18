@@ -1,0 +1,28 @@
+class Item {
+  int x, y;
+  int iWidth, iHeight;
+ 
+  PImage image;
+ 
+  Item (int x, int y) {
+    this.x = x;
+    this.y = y;
+    
+    iWidth = 30;
+    iHeight = 30;
+    
+    image = loadImage("assets/item.png");
+    image.resize(iWidth, iHeight);
+  }
+  
+  void update() {
+  }
+  
+  void render() {
+   pushMatrix();
+   translate(x, y);
+   imageMode(CENTER); //makes images' center in the middle
+   image(image, 0, 0);
+   popMatrix();
+  }
+}
