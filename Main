@@ -1,0 +1,109 @@
+ArrayList <Enemy> enemies;
+Player player;
+Item item;
+int spawnEnemy;
+ 
+void setup() {  //set up all variables
+  size(700, 700);
+  background(0, 255, 0);
+  //myEnemy = new Enemy(400, 200);
+  //myEnemy2 = new Enemy(200, 100);
+ 
+  enemies = new ArrayList<Enemy>();
+  player = new Player(width /2, height /2);
+  item = new Item(width /2, height /2);
+ 
+  spawnEnemy = 0;
+ 
+  for (int i = 0; i < 1; i++) {
+    item = new Item((int) random(0, width), (int) random(0, height));
+  }
+}
+ 
+void draw() {
+  background(175, 100, 220);
+ 
+  spawnEnemy++;
+  if (spawnEnemy >= 150) {
+    spawnEnemy = 0;
+    enemies.add(new Enemy((int) random(0, width), (int) random(0, height)));
+    //enemies.add(new Enemy(50, 50)); //enemy spawns at left top corner
+  }
+  
+  for (int i = 0; i < enemies.size(); i++) {
+    enemies.get(i).update();
+    enemies.get(i).render();
+ 
+    if (player.touchingEnemy(enemies.get(i)) && player.playerTimer <= 0) {
+      player.playerTimer = 60;
+      player.health -= 10;
+      
+      //println("Hit from enemy number " + i); //collision between enemies and player
+      //enemies.remove(i);
+      //break;
+      //println("Player's health: " + player.health);
+    }
+  }
+  
+  player.update();
+  if (player.playerTimer % 3 == 0) {
+      player.render();
+  }
+  
+  if  (player.playerTimer > 0) {
+    player.playerTimer --;
+  }
+  
+  if (player.health == 0) {
+    println("player is dead");
+  }
+ 
+  item.update();
+  item.render();
+ 
+  if (player.touchingItem(item) && player.health > 0) {
+    player.score += 10;
+    println("Score: " + player.score);
+    item = null; //to verify something that is non-existent
+    item = new Item((int) random(0, width), (int) random(0, height));
+  }
+ 
+  //GUI
+  fill(255, 0, 0);
+  rect(0, 0, 250, 50);
+  fill(0, 255, 0);
+  rect(0, 0, map(player.health, 0, 100, 0, 250), 50); //sets health 100 to 250 (ranges between 0 - 250)
+ 
+  fill(0);
+  textSize(30);
+  text("Health: " + player.health, 10, 80);
+  text("Score: " + player.score, 10, 110);
+ 
+  if (player.health <= 0) {
+    fill(0);
+    rectMode(CORNER);
+    rect(0, 0, width, height);
+    fill(255);
+    text("Game Over", width/2, height/2);
+    text("Score: " + player.score, width/2, height/2 + 100);
+  }
+  /* myEnemy.update(); //for individual enemy draw
+   myEnemy.render();
+   
+   myEnemy2.update();
+   myEnemy2.render(); */
+}
+ 
+void keyPressed() {
+  if (key == 'd' || key == 'D') player.right = true;
+  if (key == 'a' || key == 'A') player.left = true;
+  if (key == 'w' || key == 'W') player.up = true;
+  if (key == 's' || key == 'S') player.down = true;
+}
+ 
+void keyReleased() {
+  if (key == 'd' || key == 'D') player.right = false;
+  if (key == 'a' || key == 'A') player.left = false;
+  if (key == 'w' || key == 'W') player.up = false;
+  if (key == 's' || key == 'S') player.down = false;
+}
