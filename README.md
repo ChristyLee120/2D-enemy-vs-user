@@ -1,4 +1,5 @@
 # 2D-enemy-vs-user
+
 2D game programmed in Java
 
 How to play: the user can move around the player using 'd', 'a', 'w', and 's' keys
